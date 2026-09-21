@@ -11,10 +11,11 @@ class Tree {
         }
     }
     buildTree(array = this.array) {
-        const middle = array[Math.floor(array.length / 2)]
-        array.splice(Math.floor(array.length / 2), 1)
+        tempArray = [...array]
+        const middle = tempArray[Math.floor(tempArray.length / 2)]
+        tempArray.splice(Math.floor(array.length / 2), 1)
         this.root = new Tree.Node(middle)
-        array.forEach(num => {
+        tempArray.forEach(num => {
             let currentTree = this.root
             let complete = false
             while (complete === false) {
