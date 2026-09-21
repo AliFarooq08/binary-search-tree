@@ -1,5 +1,5 @@
 {
-  "name": "javascript-webpack-template",
+  "name": "binary-search-tree",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -14,16 +14,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AliFarooq08/javascript-webpack-template.git"
+    "url": "git+https://github.com/AliFarooq08/binary-search-tree.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "bugs": {
-    "url": "https://github.com/AliFarooq08/javascript-webpack-template/issues"
+    "url": "https://github.com/AliFarooq08/binary-search-tree/issues"
   },
-  "homepage": "https://github.com/AliFarooq08/javascript-webpack-template#readme",
+  "homepage": "https://github.com/AliFarooq08/binary-search-tree#readme",
   "devDependencies": {
     "@babel/core": "^7.29.7",
     "@babel/preset-env": "^7.29.7",
