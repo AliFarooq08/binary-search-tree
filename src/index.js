@@ -135,6 +135,29 @@ class Tree {
             } 
         }
     }
+    levelOrderForEach(callback, branch = this.root, queue = []) {
+        if (typeof callback === "function" && branch !== null) {
+            let removed = undefined
+            if (branch === this.root) {
+                queue.push(branch)
+                removed = queue.shift()
+                callback(removed.value)
+            }
+            if (branch.left !== null) {
+                queue.push(branch.left)
+            }
+            if (branch.right !== null) {
+                queue.push(branch.right)
+            }
+            removed = queue.shift()
+            if (removed !== undefined) {
+                callback(removed.value)
+                this.levelOrderForEach(callback, removed, queue)
+            }
+        } else if (typeof callback !== "function" ){
+            throw new TypeError("parameter entered must be function (callback)")
+        }
+    }
 }
 const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 
@@ -168,12 +191,15 @@ tree.print()
 console.log("Remove 4")
 tree.delete(4)
 tree.print()
-const tree10to5 = new Tree([10, 5])
-console.log("New Tree")
-tree10to5.buildTree()
-tree10to5.print()
-tree10to5.delete(5)
-tree10to5.print()
+function print(num) {
+    console.log(num)
+}
+const tree2 = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
+tree2.buildTree()
+tree2.print()
+tree2.levelOrderForEach(print)
+console.log("Tree 1")
+tree.levelOrderForEach(print)
 
 
 
