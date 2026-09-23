@@ -154,19 +154,43 @@ class Tree {
                 callback(removed.value)
                 this.levelOrderForEach(callback, removed, queue)
             }
-        } else if (typeof callback !== "function" ){
+        } else if (typeof callback !== "function") {
             throw new TypeError("parameter entered must be function (callback)")
         }
     }
+    inOrderForEach(callback, branch = this.root, mode = "left") {
+        if (typeof callback === "function") {
+            if (this.root.left !== null || this.root.right !== null) {
+                if (branch === this.root) {
+                    if (mode === "left") {
+                        this.inOrderForEach(callback, this.root.left, "left")
+                        callback(this.root.value)
+                        this.inOrderForEach(callback, this.root.right, "right")
+                    } else if (mode === "right") {
+                        this.inOrderForEach(callback, this.root.right, "right")
+                    }
+                } else if (branch !== null) {
+                    callback(branch.value)
+                    if (branch.left !== null) {
+                        this.inOrderForEach(callback, branch.left, mode)
+                    }
+                    if (branch.right !== null) {
+                        this.inOrderForEach(callback, branch.right, mode)
+                    }
+                } 
+            }
+        } else {
+            throw new TypeError("parameter entered must be function (callback)")
+        }
+    }
+
 }
 const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 
 tree.buildTree()
-/*
 tree.print()
 console.log(`Contains 5?: ${tree.includes(5)}`)
 console.log(`Contains 6700?: ${tree.includes(6700)}`)
-*/
 tree.insert(6700)
 tree.print()
 console.log(`NEW CHECK - Contains 6700?: ${tree.includes(6700)}`)
@@ -195,11 +219,24 @@ function print(num) {
     console.log(num)
 }
 const tree2 = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
+
 tree2.buildTree()
 tree2.print()
 tree2.levelOrderForEach(print)
 console.log("Tree 1")
 tree.levelOrderForEach(print)
+const tree3 = new Tree([1, 7, 4, 23, 8, 9, 4, 10, 5, 7, 9, 67, 6345, 324])
+
+console.log("Now in order for each")
+tree3.buildTree()
+tree3.print()
+tree3.inOrderForEach(print)
+console.log("tree2")
+tree2.print()
+tree2.inOrderForEach(print)
+console.log("tree1")
+tree.print()
+tree.inOrderForEach(print)
 
 
 
