@@ -155,32 +155,46 @@ class Tree {
                 this.levelOrderForEach(callback, removed, queue)
             }
         } else if (typeof callback !== "function") {
-            throw new TypeError("parameter entered must be function (callback)")
+            throw new TypeError("Parameter entered must be function (callback)")
         }
     }
-    inOrderForEach(callback, branch = this.root, mode = "left") {
+    inOrderForEach(callback, branch = this.root) {
         if (typeof callback === "function") {
             if (this.root.left !== null || this.root.right !== null) {
-                if (branch === this.root) {
-                    if (mode === "left") {
-                        this.inOrderForEach(callback, this.root.left, "left")
-                        callback(this.root.value)
-                        this.inOrderForEach(callback, this.root.right, "right")
-                    } else if (mode === "right") {
-                        this.inOrderForEach(callback, this.root.right, "right")
-                    }
-                } else if (branch !== null) {
+                if (branch !== null) {
+                    this.inOrderForEach(callback, branch.left)
                     callback(branch.value)
-                    if (branch.left !== null) {
-                        this.inOrderForEach(callback, branch.left, mode)
-                    }
-                    if (branch.right !== null) {
-                        this.inOrderForEach(callback, branch.right, mode)
-                    }
+                    this.inOrderForEach(callback, branch.right)
+                }
+            }
+        } else {
+            throw new TypeError("Parameter entered must be function (callback)")
+        }
+    }
+    preOrderForEach(callback, branch = this.root) {
+        if (typeof callback === "function") {
+            if (this.root.left !== null || this.root.right !== null) {
+                if (branch !== null) {
+                    callback(branch.value)
+                    this.preOrderForEach(callback, branch.left)
+                    this.preOrderForEach(callback, branch.right)
+                }
+            }
+        } else {
+            throw new TypeError("Parameter entered must be function (callback)")
+        }
+    }    
+    postOrderForEach(callback, branch = this.root) {
+        if (typeof callback === "function") {
+            if (this.root.left !== null || this.root.right !== null) {
+                if (branch !== null) {
+                        this.postOrderForEach(callback, branch.left, )
+                        this.postOrderForEach(callback, branch.right)
+                        callback(branch.value)
                 } 
             }
         } else {
-            throw new TypeError("parameter entered must be function (callback)")
+            throw new TypeError("Parameter entered must be function (callback)")
         }
     }
 
@@ -219,14 +233,16 @@ function print(num) {
     console.log(num)
 }
 const tree2 = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
-
 tree2.buildTree()
+console.log("Level order for each")
 tree2.print()
 tree2.levelOrderForEach(print)
 console.log("Tree 1")
 tree.levelOrderForEach(print)
-const tree3 = new Tree([1, 7, 4, 23, 8, 9, 4, 10, 5, 7, 9, 67, 6345, 324])
 
+const tree3 = new Tree([1, 7, 4, 23, 8, 9, 4, 10, 5, 7, 9, 67, 6345, 324])
+tree3.buildTree()
+/* WORKS!
 console.log("Now in order for each")
 tree3.buildTree()
 tree3.print()
@@ -237,6 +253,25 @@ tree2.inOrderForEach(print)
 console.log("tree1")
 tree.print()
 tree.inOrderForEach(print)
+*/ /* WORKS!
+console.log("Now pre order for each")
+tree3.print()
+tree3.preOrderForEach(print)
+console.log("tree2")
+tree2.print()
+tree2.preOrderForEach(print)
+console.log("tree1")
+tree.print()
+tree.preOrderForEach(print)
+*/
 
-
+console.log("Now post order for each")
+tree3.print()
+tree3.postOrderForEach(print)
+console.log("tree2")
+tree2.print()
+tree2.postOrderForEach(print)
+console.log("tree1")
+tree.print()
+tree.postOrderForEach(print)
 
