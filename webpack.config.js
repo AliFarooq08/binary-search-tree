@@ -6,7 +6,7 @@ export default (env, argv) => {
     mode: isProduction ? "production" : "development",
     target: "node",
     devtool: isProduction ? false : "source-map",
-    
+
     entry: "./src/index.js",
     output: {
       filename: "main.js",
