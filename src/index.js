@@ -10,31 +10,27 @@ class Tree {
             this.right = right
         }
     }
-    buildTree(array = this.array) {
-        let tempArray = [...array]
-        const middle = tempArray[Math.floor(tempArray.length / 2)]
-        tempArray.splice(Math.floor(tempArray.length / 2), 1)
-        this.root = new Tree.Node(middle)
-        tempArray.forEach(num => {
-            let currentTree = this.root
-            let complete = false
-            while (complete === false) {
-                if (num < currentTree.value && currentTree.left !== null) {
-                    currentTree = currentTree.left
-                } else if (num < currentTree.value && currentTree.left === null) {
-                    currentTree.left = new Tree.Node(num)
-                    currentTree = currentTree.left
-                    complete = true
-                } else if (num >= currentTree.value && currentTree.right !== null) {
-                    currentTree = currentTree.right
-                } else if (num >= currentTree.value && currentTree.right === null) {
-                    currentTree.right = new Tree.Node(num)
-                    currentTree = currentTree.right
-                    complete = true
-                }
+    buildTree(inputArray) {
+        const array = inputArray || this.array
+        if (!array || array.length === 0) {
+            this.root = null
+            return null
+        }
+        const uniqueSortedArray = [...new Set(array)].sort((a, b) => a - b);
+        const sortedArrayToBST = (arr, start, end) => {
+            if (start > end) {
+                return null
             }
-        });
+            const mid = Math.floor((start + end) / 2)
+            const node = new Tree.Node(arr[mid])
+            node.left = sortedArrayToBST(arr, start, mid - 1)
+            node.right = sortedArrayToBST(arr, mid + 1, end)
+            return node
+        }
+        this.root = sortedArrayToBST(uniqueSortedArray, 0, uniqueSortedArray.length - 1);
+        return this.root
     }
+
     print(node = this.root, prefix = '', isLeft = true) {
         if (node === null || node === undefined) {
             return;
@@ -246,6 +242,43 @@ class Tree {
         }
         return undefined
     }
+    isBalanced(branch = this.root) {
+        if (branch === null) {
+            return true
+        }
+        let leftHeight = undefined
+        let rightHeight = undefined
+        if (branch.left !== null) {
+            leftHeight = this.height(branch.left.value)
+        } else {
+            leftHeight = -1
+        }
+        if (branch.right !== null) {
+            rightHeight = this.height(branch.right.value)
+        } else {
+            rightHeight = -1
+        }
+        if (Math.abs(leftHeight - rightHeight) <= 1) {
+            let leftBalance = this.isBalanced(branch.left)
+            let rightBalance = this.isBalanced(branch.right)
+            return leftBalance && rightBalance
+        } else {
+            return false
+        }
+    }
+    rebalance() {
+        let values = []
+        function valueAdd(item) {
+            values.push(item)
+        }
+        this.inOrderForEach(valueAdd)
+        this.array = values
+        this.buildTree()
+        console.log("New Tree:")
+        this.print()
+        console.log("Checking if balanced:")
+        console.log(this.isBalanced())
+    }
 }
 const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.buildTree()
@@ -317,11 +350,27 @@ tree2.postOrderForEach(print)
 console.log("tree1")
 tree.print()
 tree.postOrderForEach(print)
+console.log("Heights:")
 console.log(tree.height(324))
 console.log(tree.height(7))
 console.log(tree2.height(3))
 console.log(tree.height(79))
+console.log("Depths:")
 console.log(tree.depth(324))
 console.log(tree.depth(6700))
 console.log(tree2.depth(3))
 console.log(tree.depth(79))
+console.log("Check balance")
+tree.print()
+console.log(tree.isBalanced())
+tree2.print()
+console.log(tree2.isBalanced())
+tree3.print()
+console.log(tree3.isBalanced())
+const balancedTree = new Tree([1, 2, 3])
+balancedTree.buildTree()
+balancedTree.print()
+console.log(balancedTree.isBalanced())
+tree.rebalance()
+tree2.rebalance()
+tree3.rebalance()
