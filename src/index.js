@@ -197,10 +197,42 @@ class Tree {
             throw new TypeError("Parameter entered must be function (callback)")
         }
     }
+    height(value, branch = this.root, mode = "search", count = 0, save = false) {
+        if (mode === "search") {
+            let currentTree = branch
+            let start = null
+            while (currentTree !== null) {
+                if (currentTree.value === value) {
+                    start = currentTree
+                    break
+                } else if (value < currentTree.value) {
+                    currentTree = currentTree.left
+                } else if (value > currentTree.value ) {
+                    currentTree = currentTree.right
+                }
+            }
+            if (start !== null) {
+                return this.height(value, start, "count", 0, true)
+            } else {
+                return undefined
+            }
+        } else if (mode === "count") {
+            if (branch === null) {
+                return -1
+            } else {
+                let left = this.height(value, branch.left, "count")
+                let right = this.height (value, branch.right, "count")
+                if (left > right) {
+                    return left + 1
+                } else {
+                    return right + 1
+                }
+            }
+        }
+    }
 
 }
 const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
-
 tree.buildTree()
 tree.print()
 console.log(`Contains 5?: ${tree.includes(5)}`)
@@ -242,7 +274,6 @@ tree.levelOrderForEach(print)
 
 const tree3 = new Tree([1, 7, 4, 23, 8, 9, 4, 10, 5, 7, 9, 67, 6345, 324])
 tree3.buildTree()
-/* WORKS!
 console.log("Now in order for each")
 tree3.buildTree()
 tree3.print()
@@ -253,7 +284,6 @@ tree2.inOrderForEach(print)
 console.log("tree1")
 tree.print()
 tree.inOrderForEach(print)
-*/ /* WORKS!
 console.log("Now pre order for each")
 tree3.print()
 tree3.preOrderForEach(print)
@@ -263,8 +293,6 @@ tree2.preOrderForEach(print)
 console.log("tree1")
 tree.print()
 tree.preOrderForEach(print)
-*/
-
 console.log("Now post order for each")
 tree3.print()
 tree3.postOrderForEach(print)
@@ -274,4 +302,6 @@ tree2.postOrderForEach(print)
 console.log("tree1")
 tree.print()
 tree.postOrderForEach(print)
-
+console.log(tree.height(324))
+console.log(tree.height(7))
+console.log(tree2.height(3))
