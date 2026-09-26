@@ -197,7 +197,7 @@ class Tree {
             throw new TypeError("Parameter entered must be function (callback)")
         }
     }
-    height(value, branch = this.root, mode = "search", count = 0, save = false) {
+    height(value, branch = this.root, mode = "search") {
         if (mode === "search") {
             let currentTree = branch
             let start = null
@@ -212,7 +212,7 @@ class Tree {
                 }
             }
             if (start !== null) {
-                return this.height(value, start, "count", 0, true)
+                return this.height(value, start, "count")
             } else {
                 return undefined
             }
@@ -230,7 +230,22 @@ class Tree {
             }
         }
     }
-
+    depth(value) {
+        let currentTree = this.root
+        let count = 0
+        while (currentTree !== null) {
+            if (currentTree.value === value) {
+                return count
+            } else if (value < currentTree.value) {
+                count++
+                currentTree = currentTree.left
+            } else if (value > currentTree.value ) {
+                count++
+                currentTree = currentTree.right
+            }
+        }
+        return undefined
+    }
 }
 const tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.buildTree()
@@ -305,3 +320,8 @@ tree.postOrderForEach(print)
 console.log(tree.height(324))
 console.log(tree.height(7))
 console.log(tree2.height(3))
+console.log(tree.height(79))
+console.log(tree.depth(324))
+console.log(tree.depth(6700))
+console.log(tree2.depth(3))
+console.log(tree.depth(79))
